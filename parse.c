@@ -4,7 +4,7 @@
 #include "lang.h"
 
 /**
-   
+   syntax
 
    factor     := var | num | '(' expr ')'
    list       := [expr [',' expr ]*] 

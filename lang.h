@@ -12,6 +12,8 @@
 #include <string.h>
 #include <stdarg.h>
 
+#define ARRAY_SIZE(a) (sizeof(a)/sizeof(a[0]))
+
 /*
  * lexical analizer
  */
@@ -21,9 +23,17 @@ enum lex_taken {
     TOKEN_FLOAT,
     TOKEN_STRING,
     TOKEN_IF,
+    TOKEN_ELSE,
+    TOKEN_DO,
+    TOKEN_WHILE,
     TOKEN_FOR,
     TOKEN_FOREACH,
-    TOKEN_WHILE,
+    TOKEN_CONTINUE,
+    TOKEN_BREAK,
+    TOKEN_RETURN,
+    TOKEN_NULL,
+    TOKEN_TRUE,
+    TOKEN_FALSE,
     TOKEN_EOF,
 };
 
@@ -34,7 +44,7 @@ struct lex_data {
     char * buf;
     size_t buf_size;
     int line_no;
-    int token;
+    int token;     /* ascii code or enum lex_token */
     int token_index;
     int val_int;
     double val_real;

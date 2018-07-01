@@ -62,6 +62,34 @@ bool test002(void)
     return true;
 }
 
+bool test003(void)
+{
+    int ret, index;
+    struct lex_data lex_data;
+
+    /* test for search_word */
+
+    ret = StartLex("test.txt", &lex_data);
+    
+    ret = search_word("if", 2, &index);
+    UT_ASSERT(ret == TOKEN_IF);
+
+    index = -1;
+    ret = search_word("abc", 3, &index);
+    UT_ASSERT(ret == TOKEN_ID && index == 0);
+
+    index = -1;
+    ret = search_word("ab", 2, &index);
+    UT_ASSERT(ret == TOKEN_ID && index == 1);
+    
+    index = -1;
+    ret = search_word("abc", 3, &index);
+    UT_ASSERT(ret == TOKEN_ID && index == 0);
+    
+    EndLex(&lex_data);
+    
+    return true;    
+}
 
 /* add more test code ... */
 
