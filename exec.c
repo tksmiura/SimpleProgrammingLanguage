@@ -53,4 +53,5 @@ int Execute(struct vcode* vc)
         }
         vc = vc->next;
     }
+    return 0;
 }

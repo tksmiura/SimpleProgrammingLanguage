@@ -20,7 +20,7 @@ static struct vcode* concat_vcode(struct vcode* vc0, ...)
     vc_next = va_arg(ap, struct vcode*);
 
     while (vc_next != NULL) {
-        while (vc_last->next != NULL) 
+        while (vc_last->next != NULL)
             vc_last = vc_last->next;
         vc_last->next = vc_next;
         vc_next = va_arg(ap, struct vcode*);
@@ -38,8 +38,8 @@ static void context_error(struct ptree* pt)
 static struct vcode* gen_int(struct ptree* pt, int* reg)
 {
     struct vcode* vc;
-    
-    vc = alloc_vcode();    
+
+    vc = alloc_vcode();
     vc->vop = VOP_LD_INT;
     vc->reg = (*reg)++;
     vc->val_int = pt->val_int;
@@ -53,7 +53,7 @@ static struct vcode* gen_expr(struct ptree *pt, int *reg)
 
     switch (pt->type) {
       case PT_VAR:
-        // TBD 
+        // TBD
         break;
       case PT_INT:
         return gen_int(pt, reg);
@@ -74,7 +74,7 @@ static struct vcode* gen_expr(struct ptree *pt, int *reg)
 
 static struct vcode* gen_lvalue(struct ptree *pt, int *reg)
 {
-    struct vcode *vc;
+    struct vcode *vc = NULL;
 
     switch (pt->type) {
       case PT_VAR:
@@ -115,7 +115,7 @@ static struct vcode* gen_all(struct ptree *pt)
     switch (pt->type) {
       case PT_ASSIGN:
         vc = gen_assign(pt);
-        break;        
+        break;
       case PT_EXPR:
         vc = gen_expr(pt, &reg);
         break;

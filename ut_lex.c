@@ -91,6 +91,42 @@ bool test003(void)
     return true;    
 }
 
+bool test004(void)
+{
+    int ret, index;
+    struct lex_data lex_data;
+
+    /* test for search_word */
+
+    ret = StartLex("test_sym.txt", &lex_data);
+    
+    Lex(&lex_data); UT_ASSERT(lex_data.token == TOKEN_NE);       /* != */
+    Lex(&lex_data); UT_ASSERT(lex_data.token == TOKEN_GE);       /* >= */
+    Lex(&lex_data); UT_ASSERT(lex_data.token == TOKEN_LE);       /* <= */
+    Lex(&lex_data); UT_ASSERT(lex_data.token == TOKEN_INC);      /* ++ */
+    Lex(&lex_data); UT_ASSERT(lex_data.token == TOKEN_DEC);      /* -- */
+    Lex(&lex_data); UT_ASSERT(lex_data.token == TOKEN_RSHIFT);   /* >> */
+    Lex(&lex_data); UT_ASSERT(lex_data.token == TOKEN_LSHIFT);   /* << */
+    Lex(&lex_data); UT_ASSERT(lex_data.token == TOKEN_AND);      /* && */
+    Lex(&lex_data); UT_ASSERT(lex_data.token == TOKEN_OR);       /* || */
+    Lex(&lex_data); UT_ASSERT(lex_data.token == TOKEN_PE);       /* += */
+    Lex(&lex_data); UT_ASSERT(lex_data.token == TOKEN_ME);       /* -= */
+    Lex(&lex_data); UT_ASSERT(lex_data.token == TOKEN_AE);       /* *= */
+    Lex(&lex_data); UT_ASSERT(lex_data.token == TOKEN_SE);       /* /= */
+    Lex(&lex_data); UT_ASSERT(lex_data.token == TOKEN_MODE);     /* %= */
+    Lex(&lex_data); UT_ASSERT(lex_data.token == TOKEN_ANDE);     /* &= */
+    Lex(&lex_data); UT_ASSERT(lex_data.token == TOKEN_XORE);     /* ^= */
+    Lex(&lex_data); UT_ASSERT(lex_data.token == TOKEN_ORE);      /* |= */
+    Lex(&lex_data); UT_ASSERT(lex_data.token == TOKEN_DOT2);     /* .. */
+    Lex(&lex_data); UT_ASSERT(lex_data.token == TOKEN_DOT3);     /* ... */
+    Lex(&lex_data); UT_ASSERT(lex_data.token == TOKEN_RSE);      /* >>= */
+    Lex(&lex_data); UT_ASSERT(lex_data.token == TOKEN_LSE);      /* <<= */
+
+    EndLex(&lex_data);
+    
+    return true;    
+}
+
 /* add more test code ... */
 
 int main(int argc, char *argv[])

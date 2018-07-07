@@ -19,9 +19,11 @@
  */
 enum lex_taken {
     TOKEN_ID = 256,  /* identifier */
+    /* Literal */
     TOKEN_INT,
     TOKEN_FLOAT,
     TOKEN_STRING,
+    /* Reserved word */
     TOKEN_IF,
     TOKEN_ELSE,
     TOKEN_DO,
@@ -34,6 +36,29 @@ enum lex_taken {
     TOKEN_NULL,
     TOKEN_TRUE,
     TOKEN_FALSE,
+    /*  */
+    TOKEN_NE,       /* != */
+    TOKEN_GE,       /* >= */
+    TOKEN_LE,       /* <= */
+    TOKEN_INC,      /* ++ */
+    TOKEN_DEC,      /* -- */
+    TOKEN_RSHIFT,   /* >> */
+    TOKEN_LSHIFT,   /* << */
+    TOKEN_AND,      /* && */
+    TOKEN_OR,       /* || */
+    TOKEN_PE,       /* += */
+    TOKEN_ME,       /* -= */
+    TOKEN_AE,       /* *= */
+    TOKEN_SE,       /* /= */
+    TOKEN_MODE,     /* %= */
+    TOKEN_ANDE,     /* &= */
+    TOKEN_XORE,     /* ^= */
+    TOKEN_ORE,      /* |= */
+    TOKEN_DOT2,     /* .. */
+    TOKEN_DOT3,     /* ... */
+    TOKEN_RSE,      /* >>= */
+    TOKEN_LSE,      /* <<= */
+
     TOKEN_EOF,
 };
 
@@ -86,15 +111,17 @@ struct ptree *ParseAll(char *file_name);
 /*
  * virtual machine code generator
  */
+enum vop_code {
+    VOP_LD_INT = 0x10000,
+    VOP_ASSIGN,
+    VOP_REF_VAR,
+    VOP_REF_ARRAY,
+    VOP_REF_HASH,
+    VOP_REF_STRUCT,
+};
+
 struct vcode {
-    enum {
-        VOP_LD_INT = 0x10000,
-        VOP_ASSIGN,
-        VOP_REF_VAR,
-        VOP_REF_ARRAY,
-        VOP_REF_HASH,
-        VOP_REF_STRUCT,
-    } vop;
+    int vop;
     int reg;
     union {
         int regs[3];
