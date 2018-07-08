@@ -22,7 +22,7 @@ static void dump_vcode(struct vcode *vc)
     char *op;
     char op_str[3];
     int num = 1;
- 
+
     for (; vc != NULL; vc = vc->next) {
         switch (vc->vop) {
           case VOP_LD_INT:
@@ -31,14 +31,20 @@ static void dump_vcode(struct vcode *vc)
           case VOP_ASSIGN:
             printf("ASSIGN r%d, r%d\n", vc->reg, vc->regs[0]);
             break;
+          case VOP_READ_VAR:
+            printf("READ r%d, v%d\n", vc->reg, vc->var_id);
+            break;
           case VOP_REF_VAR:
             printf("REF r%d, v%d\n", vc->reg, vc->var_id);
             break;
-          default:            
+          case VOP_RETURN:
+            printf("RETURN r%d\n", vc->reg);
+            break;
+          default:
             printf("op '%c' r%d, r%d, r%d\n",
                    vc->vop, vc->reg, vc->regs[0], vc->regs[1]);
             break;
-        }   
+        }
     }
 }
 
@@ -50,8 +56,22 @@ bool test001(void)
 {
     struct ptree *pt;
     struct vcode *vc;
-    
+
     pt = ParseAll("test.txt");
+    UT_ASSERT(pt != NULL);
+    vc = GenCode(pt);
+    UT_ASSERT(vc != NULL);
+    dump_vcode(vc);
+
+    return true;
+}
+
+bool test002(void)
+{
+    struct ptree *pt;
+    struct vcode *vc;
+
+    pt = ParseAll("test_expr.txt");
     UT_ASSERT(pt != NULL);
     vc = GenCode(pt);
     UT_ASSERT(vc != NULL);
@@ -69,7 +89,7 @@ int main(int argc, char *argv[])
     int i;
     char func_name[100];
     unsigned int count_ok = 0, count = 0;
-    
+
     for (i = 0; i < 100; i++) {
         sprintf(func_name, "test%03d", i);
         t = (Test) dlsym(RTLD_DEFAULT, func_name);

@@ -37,6 +37,7 @@ enum lex_taken {
     TOKEN_TRUE,
     TOKEN_FALSE,
     /*  */
+    TOKEN_EQ,       /* == */
     TOKEN_NE,       /* != */
     TOKEN_GE,       /* >= */
     TOKEN_LE,       /* <= */
@@ -68,6 +69,7 @@ struct lex_data {
     char * lex_point;
     char * buf;
     size_t buf_size;
+    char * line_start;
     int line_no;
     int token;     /* ascii code or enum lex_token */
     int token_index;
@@ -84,7 +86,6 @@ extern void EndLex(struct lex_data *lex);
 /*
  * parser
  */
-
 struct ptree {
     enum {
         PT_VAR,
@@ -92,14 +93,20 @@ struct ptree {
         PT_HASH,               /* var{ } */
         PT_STRUCT,             /* var.X  */
         PT_INT,
+        PT_POSTFIXED,
+        PT_UNARY,
         PT_EXPR,
         PT_ASSIGN,
         PT_IF,
         PT_WHILE,
         PT_FOR,
         PT_FOREACH,
+        PT_RETURN,
     } type;
     int op;
+    char *file_name;
+    int line_no;
+    int line_offset;
     union {
         struct ptree * subtree[3];
         int var_id;
@@ -114,10 +121,19 @@ struct ptree *ParseAll(char *file_name);
 enum vop_code {
     VOP_LD_INT = 0x10000,
     VOP_ASSIGN,
+    VOP_RETURN,
+    VOP_READ_VAR,
     VOP_REF_VAR,
     VOP_REF_ARRAY,
     VOP_REF_HASH,
     VOP_REF_STRUCT,
+    VOP_UNARY_MINUS,
+    VOP_UNARY_PLUS,
+    VOP_UNARY_NOT,
+    VOP_UNARY_INC,
+    VOP_UNARY_DEC,
+    VOP_POSTFIXED_INC,
+    VOP_POSTFIXED_DEC,
 };
 
 struct vcode {

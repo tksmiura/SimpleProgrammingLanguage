@@ -19,6 +19,9 @@ typedef bool (*Test)(void);
 void dump_ptree(struct ptree *pt, int l)
 {
     int i;
+
+    if (pt == NULL)
+        return;
     for (i = 0; i < l; i++)
         printf("  ");
     switch (pt->type) {
@@ -31,16 +34,30 @@ void dump_ptree(struct ptree *pt, int l)
       case PT_EXPR:
         printf("expr %c\n", pt->op);
         dump_ptree(pt->subtree[0], l+1);
-        dump_ptree(pt->subtree[1], l+1);        
+        dump_ptree(pt->subtree[1], l+1);
+        break;
+      case PT_UNARY:
+        printf("UNARY %c\n", pt->op);
+        dump_ptree(pt->subtree[0], l+1);
+        break;
+      case PT_POSTFIXED:
+        printf("POSTFIXED %d\n", pt->op);
+        dump_ptree(pt->subtree[0], l+1);
         break;
       case PT_ASSIGN:
         printf("assign lvalue\n");
         dump_ptree(pt->subtree[0], l+1);
-        dump_ptree(pt->subtree[1], l+1);        
+        dump_ptree(pt->subtree[1], l+1);
+        break;
+      case PT_RETURN:
+        printf("return\n");
+        dump_ptree(pt->subtree[0], l+1);
         break;
       default:
         break;
     }
+    if (pt->subtree[2] != NULL)
+        dump_ptree(pt->subtree[2], l);
 }
 /*
  * test codes
@@ -51,7 +68,19 @@ bool test001(void)
 
     pt = ParseAll("test.txt");
     UT_ASSERT(pt != NULL);
-    
+
+    dump_ptree(pt, 0);
+
+    return true;
+}
+
+bool test002(void)
+{
+    struct ptree *pt;
+
+    pt = ParseAll("test_expr.txt");
+    UT_ASSERT(pt != NULL);
+
     dump_ptree(pt, 0);
 
     return true;
@@ -66,7 +95,7 @@ int main(int argc, char *argv[])
     int i;
     char func_name[100];
     unsigned int count_ok = 0, count = 0;
-    
+
     for (i = 0; i < 100; i++) {
         sprintf(func_name, "test%03d", i);
         t = (Test) dlsym(RTLD_DEFAULT, func_name);

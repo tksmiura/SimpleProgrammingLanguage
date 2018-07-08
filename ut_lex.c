@@ -24,7 +24,7 @@ bool test001(void)
     struct lex_data lex_data;
 
     ret = StartLex("test.txt", &lex_data);
-    
+
     UT_ASSERT(ret == 0);
     UT_ASSERT(lex_data.buf_size == 15);
 
@@ -38,27 +38,27 @@ bool test002(void)
     int ret;
     struct lex_data lex_data;
     static char * token[] = {
-        "TOKEN_ID", "TOKEN_INT", "TOKEN_FLOAT", "TOKEN_STRING", "TOKEN_EOF",
+        "TOKEN_ID", "TOKEN_INT", "TOKEN_FLOAT", "TOKEN_STRING",
     };
 
     ret = StartLex("test.txt", &lex_data);
-    
+
     UT_ASSERT(ret == 0);
     UT_ASSERT(lex_data.buf_size == 15);
 
     do {
         Lex(&lex_data);
-        
-        if (lex_data.token >= TOKEN_ID && lex_data.token <= TOKEN_EOF)
+
+        if (lex_data.token >= TOKEN_ID && lex_data.token < TOKEN_EOF)
             printf("%s", token[lex_data.token - TOKEN_ID]);
-        else 
+        else
             printf("%c", lex_data.token);
-                  
+
         printf("\n");
     } while (lex_data.token != TOKEN_EOF);
 
     EndLex(&lex_data);
-    
+
     return true;
 }
 
@@ -70,7 +70,7 @@ bool test003(void)
     /* test for search_word */
 
     ret = StartLex("test.txt", &lex_data);
-    
+
     ret = search_word("if", 2, &index);
     UT_ASSERT(ret == TOKEN_IF);
 
@@ -81,14 +81,14 @@ bool test003(void)
     index = -1;
     ret = search_word("ab", 2, &index);
     UT_ASSERT(ret == TOKEN_ID && index == 1);
-    
+
     index = -1;
     ret = search_word("abc", 3, &index);
     UT_ASSERT(ret == TOKEN_ID && index == 0);
-    
+
     EndLex(&lex_data);
-    
-    return true;    
+
+    return true;
 }
 
 bool test004(void)
@@ -99,7 +99,7 @@ bool test004(void)
     /* test for search_word */
 
     ret = StartLex("test_sym.txt", &lex_data);
-    
+
     Lex(&lex_data); UT_ASSERT(lex_data.token == TOKEN_NE);       /* != */
     Lex(&lex_data); UT_ASSERT(lex_data.token == TOKEN_GE);       /* >= */
     Lex(&lex_data); UT_ASSERT(lex_data.token == TOKEN_LE);       /* <= */
@@ -123,8 +123,8 @@ bool test004(void)
     Lex(&lex_data); UT_ASSERT(lex_data.token == TOKEN_LSE);      /* <<= */
 
     EndLex(&lex_data);
-    
-    return true;    
+
+    return true;
 }
 
 /* add more test code ... */
@@ -136,7 +136,7 @@ int main(int argc, char *argv[])
     int i;
     char func_name[100];
     unsigned int count_ok = 0, count = 0;
-    
+
     for (i = 0; i < 100; i++) {
         sprintf(func_name, "test%03d", i);
         t = (Test) dlsym(RTLD_DEFAULT, func_name);

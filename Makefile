@@ -19,12 +19,12 @@ PROGRAM = lang
 DEBUG_TARGET = lang_debug
 TRACE_TARGET = lang_trace
 HEADERS = $(wildcard *.h)
-SRCS = lex.c parse.c gen_code.c exec.c
+SRCS = lex.c parse.c gen_code.c exec.c main.c
 TEST_SRCS = $(wildcard ut_*.c)
-TESTS = $(basename $(TEST_SRCS)) 
+TESTS = $(basename $(TEST_SRCS))
 GCOV_TESTS = $(TEST_SRCS:.c=_gcov)
 PIC ?= 'SVG'
-TRACE_OUT ?= lang_trace 
+TRACE_OUT ?= lang_trace
 
 # ENVIRONMENT
 CC ?= gcc   # on macos gcc=clang
@@ -35,7 +35,7 @@ TRACE_OPTION ?= -fPIC -finstrument-functions -D__TRACE_ON__
 DEBUGGER ?= gdb -tui
 GCOV ?= gcov
 PLANTUML ?= plantuml
-ifeq ($(PIC), 'SVG') 
+ifeq ($(PIC), 'SVG')
 PLANTUML_OPT ?= -tsvg
 else
 PLANTUML_OPT ?= -tpng
@@ -81,7 +81,7 @@ debug: $(DEBUG_TARGET)
 	$(DEBUGGER) $^
 
 #
-# unit test 
+# unit test
 #
 
 # build targets for test
@@ -103,7 +103,7 @@ test: $(TESTS)
 # gcov
 #
 
-# target gov (unit test only) 
+# target gov (unit test only)
 define MAKETARGETS_GCOV
 $(1)_gcov: $(1).c
 	$(CC) $(CFLAGS) -o $(1)_gcov --coverage $(1).c
@@ -149,5 +149,5 @@ clean:
 	$(RM) $(TESTS) $(GCOV_TESTS)
 	$(RM) $(SRCS:.c=.o) $(SRCS:.c=.debug_o) $(SRCS:.c=.trace_o)
 	$(RM) libtrace/libsimpletrace.o
-	$(RM) *.gcda *.gcno *.gcov 
+	$(RM) *.gcda *.gcno *.gcov
 	$(RM) map.txt *.uml *.svg *.png

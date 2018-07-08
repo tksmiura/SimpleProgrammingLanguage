@@ -19,6 +19,9 @@ int Execute(struct vcode* vc)
 
     while (vc != NULL) {
         switch (vc->vop) {
+          case VOP_READ_VAR:
+            reg[vc->reg] = var[vc->regs[0]];
+            break;
           case VOP_REF_VAR:
             reg[vc->reg].type = TYPE_REF;
             reg[vc->reg].ref = &var[vc->regs[0]];
@@ -32,6 +35,10 @@ int Execute(struct vcode* vc)
                 execute_error(vc);
             *reg[vc->reg].ref = reg[vc->regs[0]];
             break;
+          case VOP_RETURN:
+            if (reg[vc->regs[0]].type != TYPE_INT)
+                execute_error(vc);
+            return reg[vc->reg].val_int;
           case '+':
             if (reg[vc->regs[0]].type != TYPE_INT &&
                 reg[vc->regs[1]].type != TYPE_INT)

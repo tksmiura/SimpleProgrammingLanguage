@@ -1,0 +1,4 @@
+#test = - 1 * (2 + 6);
+#a    = a++ * --b > c;
+test = - 1 * (2 + 6);
+return test;

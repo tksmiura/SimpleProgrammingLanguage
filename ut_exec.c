@@ -47,7 +47,7 @@ void dump_var(void)
         print_var(wk, &var[i]);
      }
 }
-    
+
 /*
  * test codes
  */
@@ -55,12 +55,32 @@ bool test001(void)
 {
     struct ptree *pt;
     struct vcode *vc;
-    
+
     pt = ParseAll("test.txt");
     UT_ASSERT(pt != NULL);
     vc = GenCode(pt);
     UT_ASSERT(vc != NULL);
     Execute(vc);
+
+    dump_var();
+    return true;
+}
+
+/*
+ * test codes
+ */
+bool test002(void)
+{
+    struct ptree *pt;
+    struct vcode *vc;
+    int ret;
+
+    pt = ParseAll("test_expr.txt");
+    UT_ASSERT(pt != NULL);
+    vc = GenCode(pt);
+    UT_ASSERT(vc != NULL);
+    ret = Execute(vc);
+    UT_ASSERT(ret == - 1 * (2 + 6));
 
     dump_var();
     return true;
@@ -75,7 +95,7 @@ int main(int argc, char *argv[])
     int i;
     char func_name[100];
     unsigned int count_ok = 0, count = 0;
-    
+
     for (i = 0; i < 100; i++) {
         sprintf(func_name, "test%03d", i);
         t = (Test) dlsym(RTLD_DEFAULT, func_name);

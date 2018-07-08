@@ -86,6 +86,7 @@ int StartLex(char * file_name, struct lex_data *lex)
     lex->buf_size = stbuf.st_size;
     lex->lex_point = buf;
     lex->token = 0;
+    lex->line_start = buf;
     lex->line_no = 1;
     lex->file_name = file_name;
 
@@ -138,6 +139,8 @@ void Lex(struct lex_data *lex)
             switch (*lex->lex_point) {
               case '\n':
                 lex->line_no ++;
+                lex->line_start = ++lex->lex_point;
+                continue;
               case ' ':         /* 空文字 */
               case '\t':
                 lex->lex_point++;
