@@ -55,6 +55,29 @@ int Execute(struct vcode* vc)
             reg[vc->reg].val_int =
                 reg[vc->regs[0]].val_int * reg[vc->regs[1]].val_int;
             break;
+          case VOP_UNARY_MINUS:
+            if (reg[vc->regs[0]].type != TYPE_INT)
+                execute_error(vc);
+            reg[vc->reg].type = TYPE_INT;
+            reg[vc->reg].val_int = - reg[vc->regs[0]].val_int;
+            break;
+          case VOP_UNARY_PLUS:
+            if (reg[vc->regs[0]].type != TYPE_INT)
+                execute_error(vc);
+            reg[vc->reg].type = TYPE_INT;
+            reg[vc->reg].val_int = reg[vc->regs[0]].val_int;
+            break;
+          case VOP_UNARY_NOT:
+            if (reg[vc->regs[0]].type != TYPE_INT)
+                execute_error(vc);
+            reg[vc->reg].type = TYPE_INT;
+            reg[vc->reg].val_int = !reg[vc->regs[0]].val_int;
+            break;
+          case VOP_UNARY_INC:
+          case VOP_UNARY_DEC:
+          case VOP_POSTFIXED_INC:
+          case VOP_POSTFIXED_DEC:
+            // TBD
           default:
             execute_error(vc);
         }
